@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bid: #16a34a;
+  --color-ask: #dc2626;
+  --color-bid-bg: #f0fdf4;
+  --color-ask-bg: #fef2f2;
+  --color-long: #16a34a;
+  --color-short: #dc2626;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Superscript and subscript styling for order book */
+.order-price sup {
+  font-size: 0.65em;
+  vertical-align: super;
+  color: #6b7280;
+}
+
+.order-price sub {
+  font-size: 0.65em;
+  vertical-align: sub;
+  color: #6b7280;
+}
