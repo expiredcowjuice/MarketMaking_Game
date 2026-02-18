@@ -44,8 +44,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'ADD_ORDER': {
       const { participant, side, price, quantity } = action;
 
-      // Check for crossing order
-      const crossingOrder = findCrossingOrder(side, price, state.orders, participant);
+      // Enforce one order per side per participant — remove any existing order on this side
+      const filteredOrders = state.orders.filter(
+        o => !(o.participant === participant && o.side === side)
+      );
+
+      // Check for crossing order (against filtered book)
+      const crossingOrder = findCrossingOrder(side, price, filteredOrders, participant);
 
       if (crossingOrder) {
         // Execute trade immediately
@@ -67,10 +72,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         let newOrders: Order[];
         if (crossingOrder.quantity <= tradeQty) {
           // Resting order fully filled — remove it
-          newOrders = state.orders.filter(o => o.id !== crossingOrder.id);
+          newOrders = filteredOrders.filter(o => o.id !== crossingOrder.id);
         } else {
           // Partial fill — reduce resting order quantity
-          newOrders = state.orders.map(o =>
+          newOrders = filteredOrders.map(o =>
             o.id === crossingOrder.id
               ? { ...o, quantity: o.quantity - tradeQty }
               : o
@@ -111,7 +116,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       return {
         ...state,
-        orders: [...state.orders, newOrder],
+        orders: [...filteredOrders, newOrder],
       };
     }
 
@@ -201,7 +206,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case 'RESET': {
       orderIdCounter = 0;
       tradeIdCounter = 0;
-      return initialState;
+      return {
+        ...initialState,
+        participants: state.participants,
+      };
     }
 
     default:

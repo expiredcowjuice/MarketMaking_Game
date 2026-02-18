@@ -27,38 +27,38 @@ export default function SettlementModal({ participants, positions, onSettle, onC
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={onCancel}>
-      <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Settle Market</h3>
-        <p className="text-sm text-gray-500 mb-4">
+    <div className="fixed inset-0 bg-black/50 vc-backdrop flex items-center justify-center z-50" onClick={onCancel}>
+      <div className="bg-white rounded-2xl shadow-2xl p-7 w-full max-w-md vc-modal" onClick={e => e.stopPropagation()}>
+        <h3 className="text-lg font-bold text-vc-dark mb-1">Settle Market</h3>
+        <p className="text-sm text-gray-500 mb-5">
           Enter the true value. All open positions will be settled at this price.
         </p>
 
-        <div className="mb-4">
-          <label className="block text-xs text-gray-500 mb-1">True Value</label>
+        <div className="mb-5">
+          <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">True Value</label>
           <input
             type="number"
             step="any"
             value={value}
             onChange={e => { setValue(e.target.value); setError(''); }}
             placeholder="Enter the answer..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-vc-yellow bg-gray-50/50"
             autoFocus
           />
-          {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+          {error && <p className="text-vc-pink text-xs mt-1.5 font-medium">{error}</p>}
         </div>
 
         {/* PnL preview */}
         {isValid && (
-          <div className="mb-4 bg-gray-50 rounded-lg p-3">
-            <p className="text-xs text-gray-500 uppercase font-semibold mb-2">Final PnL Preview</p>
+          <div className="mb-5 bg-vc-light/70 rounded-xl p-4">
+            <p className="text-xs text-gray-400 uppercase font-bold tracking-widest mb-3">Final PnL Preview</p>
             {participants.map(p => {
               const pnl = calculatePnL(positions[p], trueValue);
               return (
-                <div key={p} className="flex justify-between text-sm py-0.5">
-                  <span className="text-gray-700">{p}</span>
-                  <span className={`font-mono font-semibold ${
-                    pnl > 0.001 ? 'text-green-600' : pnl < -0.001 ? 'text-red-600' : 'text-gray-400'
+                <div key={p} className="flex justify-between text-sm py-1">
+                  <span className="text-vc-dark font-medium">{p}</span>
+                  <span className={`font-mono font-bold ${
+                    pnl > 0.001 ? 'text-vc-teal' : pnl < -0.001 ? 'text-vc-pink' : 'text-gray-300'
                   }`}>
                     {pnl > 0 ? '+' : ''}{pnl.toFixed(2)}
                   </span>
@@ -71,14 +71,14 @@ export default function SettlementModal({ participants, positions, onSettle, onC
         <div className="flex gap-2">
           <button
             onClick={onCancel}
-            className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+            className="flex-1 py-2.5 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSettle}
             disabled={!isValid}
-            className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 py-2.5 bg-vc-yellow text-vc-dark rounded-xl text-sm font-bold hover:brightness-110 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all vc-btn"
           >
             Settle
           </button>

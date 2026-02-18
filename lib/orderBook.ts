@@ -31,9 +31,21 @@ export function getBestPriorityOrder(price: number, side: 'bid' | 'ask', orders:
 }
 
 /**
- * Check if an order is the highest priority at its price level.
+ * Check if an order is the highest priority on its side.
+ * For asks: must be the cheapest (best) ask, and earliest at that price.
+ * For bids: must be the most expensive (best) bid, and earliest at that price.
  */
 export function isHighestPriority(order: Order, allOrders: Order[]): boolean {
+  // First check: is there a better price on the same side?
+  if (order.side === 'ask') {
+    const bestAsk = getBestAsk(allOrders);
+    if (bestAsk && bestAsk.price < order.price) return false;
+  } else {
+    const bestBid = getBestBid(allOrders);
+    if (bestBid && bestBid.price > order.price) return false;
+  }
+
+  // Second check: at this price level, is this order first in time priority?
   const best = getBestPriorityOrder(order.price, order.side, allOrders);
   return best !== null && best.id === order.id;
 }

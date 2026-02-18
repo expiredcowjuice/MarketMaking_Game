@@ -11,7 +11,6 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
   const [participant, setParticipant] = useState(participants[0] || '');
   const [side, setSide] = useState<'bid' | 'ask'>('bid');
   const [price, setPrice] = useState('');
-  const [quantity, setQuantity] = useState('1');
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,7 +18,6 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
     setError('');
 
     const priceNum = parseFloat(price);
-    const qtyNum = parseInt(quantity, 10);
 
     if (!participant) {
       setError('Select a participant');
@@ -29,30 +27,25 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
       setError('Enter a valid price');
       return;
     }
-    if (isNaN(qtyNum) || qtyNum < 1) {
-      setError('Quantity must be at least 1');
-      return;
-    }
 
-    onSubmit(participant, side, priceNum, qtyNum);
+    onSubmit(participant, side, priceNum, 1);
     setPrice('');
-    setQuantity('1');
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="px-4 py-3 border-b border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Submit Order</h2>
+    <div className="bg-white rounded-2xl border border-gray-200/80 vc-card overflow-hidden">
+      <div className="px-5 py-4 border-b border-gray-100">
+        <h2 className="text-xs font-bold text-vc-dark uppercase tracking-widest">Submit Order</h2>
       </div>
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="grid grid-cols-2 gap-3 mb-3">
+      <form onSubmit={handleSubmit} className="p-5">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           {/* Participant */}
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Participant</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Participant</label>
             <select
               value={participant}
               onChange={e => setParticipant(e.target.value)}
-              className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-vc-yellow bg-gray-50/50"
             >
               {participants.map(p => (
                 <option key={p} value={p}>{p}</option>
@@ -62,15 +55,15 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
 
           {/* Side */}
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Side</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Side</label>
             <div className="flex gap-1">
               <button
                 type="button"
                 onClick={() => setSide('bid')}
-                className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors ${
+                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
                   side === 'bid'
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-vc-teal text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                 }`}
               >
                 Bid
@@ -78,10 +71,10 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
               <button
                 type="button"
                 onClick={() => setSide('ask')}
-                className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors ${
+                className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${
                   side === 'ask'
-                    ? 'bg-red-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-vc-pink text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                 }`}
               >
                 Ask
@@ -91,38 +84,26 @@ export default function OrderEntry({ participants, onSubmit }: OrderEntryProps) 
 
           {/* Price */}
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Price</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">Price</label>
             <input
               type="number"
               step="any"
               value={price}
               onChange={e => setPrice(e.target.value)}
               placeholder="0.00"
-              className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Quantity */}
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Quantity</label>
-            <input
-              type="number"
-              min="1"
-              value={quantity}
-              onChange={e => setQuantity(e.target.value)}
-              className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-vc-yellow bg-gray-50/50"
             />
           </div>
         </div>
 
-        {error && <p className="text-red-600 text-xs mb-2">{error}</p>}
+        {error && <p className="text-vc-pink text-xs mb-3 font-medium">{error}</p>}
 
         <button
           type="submit"
-          className={`w-full py-2 rounded font-medium text-sm text-white transition-colors ${
+          className={`w-full py-2.5 rounded-xl font-bold text-sm text-white transition-all vc-btn ${
             side === 'bid'
-              ? 'bg-green-600 hover:bg-green-700'
-              : 'bg-red-600 hover:bg-red-700'
+              ? 'bg-vc-teal hover:bg-[#0a8fad] shadow-sm'
+              : 'bg-vc-pink hover:bg-[#e8566a] shadow-sm'
           }`}
         >
           Submit {side === 'bid' ? 'Bid' : 'Ask'}

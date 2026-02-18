@@ -22,28 +22,28 @@ export default function TakerModal({ order, participants, onConfirm, onCancel }:
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={onCancel}>
-      <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm" onClick={e => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Execute Trade</h3>
-        <p className="text-sm text-gray-500 mb-4">
+    <div className="fixed inset-0 bg-black/50 vc-backdrop flex items-center justify-center z-50" onClick={onCancel}>
+      <div className="bg-white rounded-2xl shadow-2xl p-7 w-full max-w-sm vc-modal" onClick={e => e.stopPropagation()}>
+        <h3 className="text-lg font-bold text-vc-dark mb-1">Execute Trade</h3>
+        <p className="text-sm text-gray-500 mb-5">
           {order.side === 'bid' ? 'Sell to' : 'Buy from'}{' '}
-          <span className="font-medium text-gray-700">{order.participant}</span> at{' '}
-          <span className={`font-mono font-semibold ${order.side === 'bid' ? 'text-green-700' : 'text-red-700'}`}>
+          <span className="font-semibold text-vc-dark">{order.participant}</span> at{' '}
+          <span className={`font-mono font-bold ${order.side === 'bid' ? 'text-vc-teal' : 'text-vc-pink'}`}>
             {order.price}
           </span>
         </p>
 
-        <div className="mb-4">
-          <label className="block text-xs text-gray-500 mb-1">Who is the taker?</label>
+        <div className="mb-5">
+          <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Who is the taker?</label>
           <div className="grid grid-cols-2 gap-2">
             {eligibleParticipants.map(p => (
               <button
                 key={p}
                 onClick={() => setSelectedTaker(p)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   selectedTaker === p
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-vc-yellow text-vc-dark shadow-sm'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {p}
@@ -52,8 +52,8 @@ export default function TakerModal({ order, participants, onConfirm, onCancel }:
           </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-xs text-gray-500 mb-1">
+        <div className="mb-5">
+          <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
             Quantity (max {order.quantity})
           </label>
           <input
@@ -62,23 +62,23 @@ export default function TakerModal({ order, participants, onConfirm, onCancel }:
             max={order.quantity}
             value={quantity}
             onChange={e => setQuantity(e.target.value)}
-            className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-vc-yellow bg-gray-50/50"
           />
         </div>
 
         <div className="flex gap-2">
           <button
             onClick={onCancel}
-            className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+            className="flex-1 py-2.5 bg-gray-100 text-gray-600 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
-            className={`flex-1 py-2 text-white rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-2.5 text-white rounded-xl text-sm font-bold transition-all vc-btn shadow-sm ${
               order.side === 'bid'
-                ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-green-600 hover:bg-green-700'
+                ? 'bg-vc-pink hover:bg-[#e8566a]'
+                : 'bg-vc-teal hover:bg-[#0a8fad]'
             }`}
           >
             {order.side === 'bid' ? 'Sell' : 'Buy'}

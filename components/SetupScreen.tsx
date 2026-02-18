@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 interface SetupScreenProps {
   onStart: (marketQuestion: string, participants: string[]) => void;
+  previousParticipants?: string[];
 }
 
-export default function SetupScreen({ onStart }: SetupScreenProps) {
+export default function SetupScreen({ onStart, previousParticipants = [] }: SetupScreenProps) {
   const [marketQuestion, setMarketQuestion] = useState('');
-  const [participants, setParticipants] = useState<string[]>([]);
+  const [participants, setParticipants] = useState<string[]>(previousParticipants);
   const [newName, setNewName] = useState('');
   const [error, setError] = useState('');
 
@@ -47,13 +48,20 @@ export default function SetupScreen({ onStart }: SetupScreenProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Market Making Game</h1>
-        <p className="text-gray-500 text-sm mb-6">Learn to make markets by trading with friends</p>
+    <div className="min-h-screen bg-vc-dark flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-lg vc-card relative overflow-hidden">
+        {/* Yellow accent bar at top */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-vc-yellow" />
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-vc-dark mb-2 tracking-tight">
+            <span className="vc-highlight">Market Making</span> Game
+          </h1>
+          <p className="text-gray-500 text-sm">Learn to make markets by trading with friends</p>
+        </div>
+
+        <div className="mb-8">
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
             Market Question
           </label>
           <input
@@ -61,26 +69,26 @@ export default function SetupScreen({ onStart }: SetupScreenProps) {
             value={marketQuestion}
             onChange={e => setMarketQuestion(e.target.value)}
             placeholder="e.g. Total runtime of Lord of the Rings trilogy in minutes?"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-vc-yellow focus:border-transparent bg-gray-50/50 placeholder:text-gray-400 transition-shadow"
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="mb-8">
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
             Participants
           </label>
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-3">
             <input
               type="text"
               value={newName}
               onChange={e => setNewName(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Enter name"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-vc-yellow focus:border-transparent bg-gray-50/50 placeholder:text-gray-400 transition-shadow"
             />
             <button
               onClick={addParticipant}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="px-5 py-3 bg-vc-dark text-white rounded-xl text-sm font-semibold hover:bg-black transition-colors vc-btn"
             >
               Add
             </button>
@@ -91,12 +99,12 @@ export default function SetupScreen({ onStart }: SetupScreenProps) {
               {participants.map(name => (
                 <span
                   key={name}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-vc-yellow/15 text-vc-dark rounded-full text-sm font-semibold border border-vc-yellow/20"
                 >
                   {name}
                   <button
                     onClick={() => removeParticipant(name)}
-                    className="ml-1 text-blue-400 hover:text-blue-700 font-bold"
+                    className="ml-0.5 text-vc-dark/30 hover:text-vc-pink transition-colors font-bold text-base leading-none"
                   >
                     &times;
                   </button>
@@ -105,20 +113,20 @@ export default function SetupScreen({ onStart }: SetupScreenProps) {
             </div>
           )}
 
-          <p className="text-xs text-gray-400 mt-2">
+          <p className="text-xs text-gray-400 mt-3">
             {participants.length} participant{participants.length !== 1 ? 's' : ''} added
             {participants.length < 2 ? ' (need at least 2)' : ''}
           </p>
         </div>
 
         {error && (
-          <p className="text-red-600 text-sm mb-4">{error}</p>
+          <p className="text-vc-pink text-sm mb-4 font-medium">{error}</p>
         )}
 
         <button
           onClick={handleStart}
           disabled={participants.length < 2 || !marketQuestion.trim()}
-          className="w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-3.5 bg-vc-yellow text-vc-dark rounded-xl font-bold text-base hover:brightness-110 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all vc-btn tracking-tight"
         >
           Start Game
         </button>

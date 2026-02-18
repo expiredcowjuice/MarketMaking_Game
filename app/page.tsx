@@ -8,7 +8,7 @@ export default function Home() {
   const { state, startGame, addOrder, cancelOrder, executeTrade, settle, reset } = useGameState();
 
   if (state.phase === 'setup') {
-    return <SetupScreen onStart={startGame} />;
+    return <SetupScreen onStart={startGame} previousParticipants={state.participants} />;
   }
 
   return (

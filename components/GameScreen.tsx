@@ -31,7 +31,7 @@ export default function GameScreen({
     // Check priority — must be highest priority at that price level
     if (!isHighestPriority(order, state.orders)) {
       setWarning(
-        `Cannot trade against this order. There is a higher-priority order at the same price (${order.price}) that must be filled first.`
+        `Cannot trade against this order. There is a higher-priority order that must be filled first (better price or earlier time priority).`
       );
       return;
     }
@@ -46,39 +46,47 @@ export default function GameScreen({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-vc-light">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">Market Making Game</h1>
-            <p className="text-sm text-gray-600 mt-0.5">{state.marketQuestion}</p>
-          </div>
-          <div className="flex gap-2">
-            {state.phase === 'playing' && (
+      <div className="bg-vc-dark">
+        {/* Yellow accent line */}
+        <div className="h-1 bg-vc-yellow" />
+        <div className="px-6 py-5">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-white tracking-tight">
+                <span className="vc-highlight">Market Making</span>{' '}
+                <span className="text-white">Game</span>
+              </h1>
+              <p className="text-sm text-gray-400 mt-1 max-w-md truncate">{state.marketQuestion}</p>
+            </div>
+            <div className="flex gap-3">
+              {state.phase === 'playing' && (
+                <button
+                  onClick={() => setShowSettlement(true)}
+                  className="px-5 py-2.5 bg-vc-yellow text-vc-dark rounded-xl text-sm font-bold hover:brightness-110 transition-all vc-btn"
+                >
+                  Settle Market
+                </button>
+              )}
               <button
-                onClick={() => setShowSettlement(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                onClick={reset}
+                className="px-5 py-2.5 bg-white/10 text-white rounded-xl text-sm font-medium hover:bg-white/20 transition-colors border border-white/10"
               >
-                Settle Market
+                New Game
               </button>
-            )}
-            <button
-              onClick={reset}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
-            >
-              New Game
-            </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Settled banner */}
       {state.phase === 'settled' && state.trueValue !== null && (
-        <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+        <div className="bg-vc-yellow/10 border-b border-vc-yellow/30 px-6 py-3">
           <div className="max-w-7xl mx-auto text-center">
-            <span className="text-blue-800 text-sm font-medium">
-              Market settled at <span className="font-mono font-bold">{state.trueValue}</span>
+            <span className="text-vc-dark text-sm font-semibold">
+              Market settled at{' '}
+              <span className="font-mono font-bold text-base vc-highlight">{state.trueValue}</span>
             </span>
           </div>
         </div>
@@ -94,6 +102,8 @@ export default function GameScreen({
               orders={state.orders}
               onClickOrder={handleClickOrder}
               onCancelOrder={cancelOrder}
+              onSubmitOrder={(p, side, price) => addOrder(p, side, price, 1)}
+              gamePhase={state.phase}
             />
             {state.phase === 'playing' && (
               <OrderEntry

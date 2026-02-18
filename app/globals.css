@@ -1,27 +1,89 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bid: #16a34a;
-  --color-ask: #dc2626;
-  --color-bid-bg: #f0fdf4;
-  --color-ask-bg: #fef2f2;
-  --color-long: #16a34a;
-  --color-short: #dc2626;
+  --color-vc-teal: #0CA3C4;
+  --color-vc-pink: #FA6980;
+  --color-vc-yellow: #EBDF00;
+  --color-vc-dark: #202124;
+  --color-vc-light: #EBEDED;
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #EBEDED;
+  color: #202124;
 }
 
-/* Superscript and subscript styling for order book */
+/* VivCourt signature yellow highlight underline on headings */
+.vc-highlight {
+  display: inline;
+  box-shadow: 0 -0.4em 0 inset #FFF200;
+  padding: 0 0.05em;
+}
+
+/* Yellow focus ring globally */
+*:focus-visible {
+  outline: 2px solid #EBDF00;
+  outline-offset: 2px;
+}
+
+/* Card style — clean with subtle lift */
+.vc-card {
+  transition: box-shadow 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.vc-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+/* Button press effect */
+.vc-btn {
+  transition: all 0.15s ease;
+}
+.vc-btn:active {
+  transform: scale(0.97);
+}
+
+/* Modal backdrop blur */
+.vc-backdrop {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Modal entrance animation */
+.vc-modal {
+  animation: vc-modal-in 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+@keyframes vc-modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Superscript styling for order book priority */
 .order-price sup {
   font-size: 0.65em;
   vertical-align: super;
   color: #6b7280;
 }
 
-.order-price sub {
-  font-size: 0.65em;
-  vertical-align: sub;
-  color: #6b7280;
+/* Custom scrollbar for trade log */
+.vc-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.vc-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.vc-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+.vc-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
